@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Students DB</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<style type="text/css">
+		th, td {
+		  padding: 15px;
+		}
+	</style>
+
+	
+
+</head>
+<body>
+
+	<center>
+		<div class="content-head">
+			<h2>View Students</h2>
+		</div>
+
+		<div id="message" style="color: 'red';"></div>
+
+		<div class="main-content">
+			<table border="1">
+				<tr>
+					<th>Name</th>
+					<th>Email address</th>
+				</tr>
+				<% for(var i = 0; i < students.length; i++) {%>
+					<tr>
+						<td>
+							<%= students[i].name %>
+						</td>
+						<td>
+							<%= students[i].email %>
+						</td>
+						<td>
+							<button id="UpdateStd">Edit</button>
+						</td>
+						<td>
+							<button id="DeleteBtn">Delete</button>
+						</td>
+					</tr>
+				<% } %>
+			</table>
+		</div>
+
+		<a href='/'>Back</a>
+	</center>
+
+	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<!-- <script type="text/javascript" src="js/script.js"></script> -->
+	<script src="/main.js"></script>
+</body>
+</html>
+

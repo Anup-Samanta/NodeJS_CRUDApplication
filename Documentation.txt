@@ -1,0 +1,277 @@
+C:\xampp\htdocs\NodejsCRUD>nodemon server:
+
+
+NodeJS CRUD Application:
+
+CRUD, Express and MongoDB are big words for a person who has never touched any server-side programming in their life. Let’s quickly introduce what they are before we diving into the tutorial.
+
+1. Express is a framework for building web applications on top of Node.js. It simplifies the server creation process that is already available in Node. In case you were wondering, Node allows you to use JavaScript as your server-side language.
+
+2. MongoDB is a database. This is the place where you store information for your websites (or applications).
+
+CRUD is an acronym for Create, Read, Update and Delete. It is a set of operations we get servers to execute (POST, GET, PUT and DELETE requests respectively). This is what each operation does:
+
+    Create (POST) - Make something
+    Read (GET)- Get something
+    Update (PUT) - Change something
+    Delete (DELETE)- Remove something
+
+POST, GET, PUT, and DELETE requests let us construct Rest APIs.
+
+---------------------------------------------------------------
+Getting started:
+
+Start by creating a folder for this project. Feel free to call it anything you want. After you’ve created the folder, navigate into it with the Terminal and run "npm init".
+"npm init" creates a package.json file which helps you manage dependencies (which we will install as we go through the tutorial).
+
+DavjwPvkX1AxSI0l
+anupsamanta
+
+database connection:
+--------------------
+Connectionstring = 'mongodb+srv://<username>:<password>@<clustername>-rmp3c.mongodb.net/test?retryWrites=true&w=majority'
+
+Step 1. 
+MongoClient.connect(connectionString, (err, client) => {
+  // ... do something here
+}))
+
+Step 2.
+MongoClient.connect(connectionString, (err, client) => {
+  if (err) return console.error(err)
+  console.log('Connected to Database')
+})
+
+OR,
+ 
+You can remove the deprecation warning by adding the option into MongoClient.connect
+
+MongoClient.connect(connectionString, {
+  useUnifiedTopology: true
+}, (err, client) => {
+  if (err) return console.error(err)
+  console.log('Connected to Database')
+})
+
+
+Step 3.
+MongoClient.connect(connectionString, { useUnifiedTopology: true })
+  .then(client => {
+    console.log('Connected to Database')
+    const db = client.db('star-wars-quotes')
+  })
+  
+  
+Step 4.
+We need to create a collection before we can store items into a database. Here’s a simple analogy to help you clear up the terms in MongoDB:
+
+    Imagine a Database is a Room.
+    A Room contains boxes (collections).
+
+Like Databases, you can name collections anything you want. In this case, let’s store quotes into a quotes collection. We use db.collection to specify the collection.
+
+MongoClient.connect(/* ... */)
+  .then(client => {
+    // ...
+    const db = client.db('star-wars-quotes')
+    const quotesCollection = db.collection('quotes')
+
+    // ...
+  })
+
+Create:
+------------------
+We can use the insertOne method to add items into a MongoDB collection.
+
+app.post('/quotes', (req, res) => {
+  quotesCollection.insertOne(req.body)
+    .then(result => {
+      console.log(result)
+    })
+    .catch(error => console.error(error))
+})
+
+Try submitting the <form> from the browser. You should see a big scary looking result in the Terminal.
+Post result.
+
+If you see this, congratulations! You’ve successfully add the quote into the database.
+
+You can check the items inside the database by going to “Collections” in MongoDB Atlas.
+Collections in MongoDB Atlas.
+
+You should see a document in your database. (Each database entry is called a document).
+Documents in MongoDB Atlas.
+
+If you go back to the Browser, you’ll see it’s still trying to load something.
+Browser still trying to load a page.
+
+This happens because the browser expects something back from the server.
+
+In this case, we don’t need to send the browser information. Let’s ask the browser to redirect back to / instead. We do this with res.redirect.
+
+app.post('/quotes', (req, res) => {
+  quotesCollection.insertOne(req.body)
+    .then(result => {
+      res.redirect('/')
+    })
+    .catch(error => console.error(error))
+})
+
+Redirected. Browser is no longer waiting to load something.
+
+Yay!
+
+Since we have some quotes in the collection, let’s show them to our user when they land on the page!
+
+Read:
+-----------------------------------------------------------------------------------
+
+We need to do two things to show quotes from MongoDB Atlas to our users.
+
+    Get quotes from MongoDB Atlas.
+    Rendering the quotes in HTML with a template engine
+
+Let’s go one step at a time.
+Getting quotes from MongoDB
+
+We can get quotes we stored in MongoDB with the find method. This method from mLab by using the find method that’s available in the collection method.
+
+app.get('/', (req, res) => {
+  const cursor = db.collection('quotes').find()
+  console.log(cursor)
+  // ...
+})
+
+The find method returns a cursor which won’t make sense if you tried logging it.
+  Cursor object from MongoDB
+
+But this cursor object contains all quotes from our database! It has a bunch of method that lets us get our data. For example, we can use toArray to convert the data into an array.
+
+app.get('/', (req, res) => {
+  db.collection('quotes').find().toArray()
+    .then(results => {
+      console.log(results)
+    })
+    .catch(error => console.error(error))
+  // ...
+})
+
+ 
+
+Great! We see the quotes we added! (You see so many of the same quotes because I added them all when writing this tutorial 😆).
+
+Next we want to generate a HTML that contains all our quotes.
+Rendering the HTML
+
+We cannot serve up the index.html file and expect quotes to magically appear because there’s no way to add dynamic content to a HTML file.
+
+What we can do, instead, is to use a template engine to generate the HTML. Popular template engines include Pug, Embedded JavaScript, and Nunjucks.
+
+I’ve wrote extensively about the how and why of template engines in a separate post. You might want to check it out if you have no idea what template engines are.
+
+I use Nunjucks as my template engine of choice. Feel free to check out the post to find out why.
+
+For this tutorial, we will use Embedded JavaScript (EJS) as our template engine because it’s the easiest to start with. You’ll find it familiar from the get-go since you’ll be writing HTML and JavaScript.
+Using EJS
+
+First, we need to install EJS.
+
+npm install ejs --save
+
+Next, we need to set view engine to ejs. This tells Express we’re using EJS as the template engine. You can need to place it before any app.use, app.get or app.post methods.
+
+app.set('view engine', 'ejs')
+
+// Middlewares and other routes here...
+
+We can now generate HTML that contains the quotes. This process is called rendering the HTML.
+
+We will use the render method built into Express’s response. It needs to follow the following syntax:
+
+res.render(view, locals)
+
+    view is the name of the file we’re rendering. This file must be placed inside a views folder.
+    localsis the data passed into the file.
+
+Let’s create a view. We’ll make an index.ejs file inside the views folder.
+
+mkdir views
+touch views/index.ejs
+
+We’ll copy/paste everything from index.html into index.ejs.
+
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Star Wars Quote App</title>
+  </head>
+
+  <body>
+    <h1>May Node and Express be with you.</h1>
+
+    <form action="/quotes" method="POST">
+      <input type="text" placeholder="name" name="name" />
+      <input type="text" placeholder="quote" name="quote" />
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
+
+Next, we’ll use res.render to render this index.ejs file.
+
+app.get('/', (req, res) => {
+  db.collection('quotes').find().toArray()
+    .then(/* ... */)
+    .catch(/* ... */)
+  res.render('index.ejs', {})
+})
+
+If you refresh the page, you should still see the same thing. Nothing should change, nothing should break.
+Renders an ejs file.
+
+Let’s put the quotes into index.ejs. To do this, we need to pass the quotes into the render method.
+
+app.get('/', (req, res) => {
+  db.collection('quotes').find().toArray()
+    .then(results => {
+      res.render('index.ejs', { quotes: results })
+    })
+    .catch(/* ... */)
+})
+
+In index.ejs, we can use place variables between <%= and %> tags. Let’s try putting quotes into the HTML:
+
+<!-- In index.ejs -->
+<body>
+  <h1> ... </h1>
+  <form> ... </form>
+  <%= quotes %>
+</body>
+
+You should see this:
+Rendered quotes in EJS.
+
+We see lots of [object Object] because each quote inside results is a JavaScript object. ejs cannot convert that object into HTML automatically.
+
+We need to loop through the quotes. We can do this with a for loop. In EJS, we write a for loop like how we write a JavaScript for loop. The only difference is we need to put the for loop statements between <% and %>.
+
+<h2> Quotes </h2>
+
+<ul class="quotes">
+  <!-- Loop through quotes -->
+  <% for(var i = 0; i < quotes.length; i++) {%>
+    <li class="quote">
+      <!-- Output name from the iterated quote object -->
+      <span><%= quotes[i].name %></span>:
+      <!-- Output quote from the iterated quote object -->
+      <span><%= quotes[i].quote %></span>
+    </li>
+  <% } %>
+</ul>
+
+Rendered quotes with EJS. 
+
+CRUD - UPDATE:
+---------------------------------------------------------------------------------------------------

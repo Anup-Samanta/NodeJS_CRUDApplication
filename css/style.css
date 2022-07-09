@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Telivigala&family=RocknRoll+One&display=swap');
+/*
+font-family: 'RocknRoll One', sans-serif;
+font-family: 'Akaya Telivigala', cursive;
+*/
+
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body{
+	background-color: #e9ecef;
+	font-family: 'Akaya Telivigala', cursive;
+}
+
+.main-content{
+	padding: 6%;
+}
+.main-content,
+.content-head,
+.content-footer{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.search-field{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.main-content div,
+.addTopic div{
+	padding: 10px 0 10px 0;
+}
+
+.content-head{
+	justify-content: flex-start;
+	font-family: 'RocknRoll One', sans-serif;
+}
+
+.content-footer{
+	justify-content: flex-end;
+}
+
+.login-btn,
+.search-btn,
+.update-btn{
+	background-color: #e1850f;
+	color: white;
+	cursor: pointer;
+}
+
+.login-btn:hover,
+.search-btn:hover,
+.update-btn:hover{
+	background-color: #95682f;
+	color: white;
+	cursor: pointer;
+}
+
+.modal-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+    text-align: center;
+    padding-left: 42%;
+}
+
+#addTopicFields{
+	display: none;
+	background-color: white;
+}
+
+.editBtton{
+	color: #fff;
+	text-decoration: none;
+}
+
+.editBtton:hover {
+	color: #8e8a8a;
+	text-decoration: none;
+}
+
+.addaTopicContainer{
+	width: 75px;
+	margin: 0 auto;
+}
+
+
+#addaTopic{
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	cursor: pointer;
+	color: #e1850f;
+}
+
+#addaTopic:hover{
+	color: #95682f;
+}
+
+#CloseaTopicbtn{
+	display: flex;
+	justify-content: flex-end;
+	cursor: pointer;
+}
+
+.show-contents-footer{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.show-contents-footer span{
+	text-align: center;
+}
+
+.show-contents{
+	margin-top: 10px;
+}
+
+.show-contents {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.showTopics {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	background-color: #403c29;
+	margin: 0 0 10px 0;
+	color: #fff;
+	border-radius: 5px;
+	padding: 10px 14px;
+}
+
+.showTopics h4 {
+	color: #e19c17;
+}
+
+.update-content{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.update-content div,
+#editForm div{
+	margin-top: 10px;
+}
+
+select{
+	width: 100%;
+}
+
+#editForm,
+.delete-content,
+.delete-content .confirmation{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+/*Delete page*/
+.delete-content .confirmation{
+	line-height: 40px;
+}
+
+.confirmation button{
+	background: transparent;
+	border: none;
+	outline: none;
+}
+
+.delete-content .confirmation .confirmDetele,
+.delete-content .confirmation .cancelDetele{
+	cursor: pointer;
+}
+
+.fa-check-circle{
+	color: green;
+}
+
+.fa-times-circle{
+	color: red;
+}
+
+.far{
+	padding: 6px;
+}
